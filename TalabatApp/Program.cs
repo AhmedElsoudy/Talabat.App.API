@@ -6,7 +6,7 @@ namespace TalabatApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +23,24 @@ namespace TalabatApp
             });
 
             var app = builder.Build();
+
+            using var scope = app.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var dbcontext = services.GetRequiredService<StoreContext>();
+
+            var loggerFactor = services.GetRequiredService<ILoggerFactory>();
+
+            try
+            {
+                await dbcontext.Database.MigrateAsync();
+
+            }catch(Exception ex)
+            {
+                var logger = loggerFactor.CreateLogger<Program>();
+                logger.LogError(ex, "There is Error in Migration Process");
+            }
+
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
