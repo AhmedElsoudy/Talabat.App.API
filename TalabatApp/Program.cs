@@ -1,7 +1,10 @@
 
 using Microsoft.EntityFrameworkCore;
+using TalabatApp.Core.Entities;
+using TalabatApp.Core.Repository.Contract;
 using TalabatApp.Repository;
 using TalabatApp.Repository.Data;
+using TalabatApp.Repository.Repositories;
 
 namespace TalabatApp
 {
@@ -17,6 +20,13 @@ namespace TalabatApp
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            //builder.Services.AddScoped<IGenericRepository<Product>, GenericRepositories<Product>>();
+            //builder.Services.AddScoped<IGenericRepository<ProductBrand>, GenericRepositories<ProductBrand>>();
+            //builder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepositories<ProductCategory>>();
+          
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositories<>));
+
 
             builder.Services.AddDbContext<StoreContext>(options =>
             {
