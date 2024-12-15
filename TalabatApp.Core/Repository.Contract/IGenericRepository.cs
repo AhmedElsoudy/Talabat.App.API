@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TalabatApp.Core.Entities;
+using TalabatApp.Core.Specifications;
 
 namespace TalabatApp.Core.Repository.Contract
 {
@@ -11,6 +12,9 @@ namespace TalabatApp.Core.Repository.Contract
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetAsync(int id);
+
+        Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecification<T> spec);
+        Task<T> GetWithSpecAsync(ISpecification<T> spec);
 
 
 
