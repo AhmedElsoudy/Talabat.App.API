@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TalabatApp.Core.Entities;
 using TalabatApp.Core.Repository.Contract;
+using TalabatApp.Helpers;
 using TalabatApp.Repository;
 using TalabatApp.Repository.Data;
 using TalabatApp.Repository.Repositories;
@@ -26,7 +27,7 @@ namespace TalabatApp
             //builder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepositories<ProductCategory>>();
           
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositories<>));
-
+            builder.Services.AddAutoMapper(M => M.AddProfile(typeof(MappingProfile)));
 
             builder.Services.AddDbContext<StoreContext>(options =>
             {
