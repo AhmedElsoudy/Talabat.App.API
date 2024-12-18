@@ -27,7 +27,7 @@ namespace TalabatApp
             //builder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepositories<ProductCategory>>();
           
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositories<>));
-            builder.Services.AddAutoMapper(M => M.AddProfile(typeof(MappingProfile)));
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             builder.Services.AddDbContext<StoreContext>(options =>
             {
@@ -66,6 +66,7 @@ namespace TalabatApp
 
             app.UseAuthorization();
 
+            app.UseStaticFiles();
 
             app.MapControllers();
 
