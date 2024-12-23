@@ -5,6 +5,7 @@ using TalabatApp.Core.Entities;
 using TalabatApp.Core.Repository.Contract;
 using TalabatApp.Errors;
 using TalabatApp.Helpers;
+using TalabatApp.MiddleWares;
 using TalabatApp.Repository;
 using TalabatApp.Repository.Data;
 using TalabatApp.Repository.Repositories;
@@ -30,6 +31,8 @@ namespace TalabatApp
           
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositories<>));
             builder.Services.AddAutoMapper(typeof(MappingProfile));
+            
+
 
             builder.Services.AddDbContext<StoreContext>(options =>
             {
@@ -56,6 +59,7 @@ namespace TalabatApp
 
             var app = builder.Build();
 
+            app.Services.GetRequiredService<ILogger<Program>>();
             using var scope = app.Services.CreateScope();
             var services = scope.ServiceProvider;
             var dbcontext = services.GetRequiredService<StoreContext>();
@@ -76,6 +80,9 @@ namespace TalabatApp
 
 
             // Configure the HTTP request pipeline.
+
+            app.UseMiddleware<ExceptionMiddleware>();
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
