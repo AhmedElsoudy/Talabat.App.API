@@ -1,7 +1,9 @@
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TalabatApp.Core.Entities;
 using TalabatApp.Core.Repository.Contract;
+using TalabatApp.Errors;
 using TalabatApp.Helpers;
 using TalabatApp.Repository;
 using TalabatApp.Repository.Data;
@@ -32,6 +34,24 @@ namespace TalabatApp
             builder.Services.AddDbContext<StoreContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = (actioncontext) =>
+                {
+                    var errors = actioncontext.ModelState.Where(P => P.Value.Errors.Count() > 0)
+                                                         .SelectMany(P => P.Value.Errors)
+                                                         .Select(E => E.ErrorMessage)
+                                                         .ToList();
+
+                    var response = new ApiValidationErrorResponse()
+                    {
+                        Errors = errors
+                    };
+                    return new BadRequestObjectResult(response);
+
+                };
             });
 
             var app = builder.Build();

@@ -5,6 +5,7 @@ using TalabatApp.Core.Entities;
 using TalabatApp.Core.Repository.Contract;
 using TalabatApp.Core.Specifications;
 using TalabatApp.Dtos;
+using TalabatApp.Errors;
 
 namespace TalabatApp.Controllers
 {
@@ -39,7 +40,7 @@ namespace TalabatApp.Controllers
             var product = await _productRepo.GetWithSpecAsync(spec);
             if(product == null)
             {
-                return NotFound(new {message = "Not Found" , StatusCode = 404});
+                return NotFound(new ApiErrorResponse(404));
             }
             return Ok(_mapper.Map<Product, ProductDto>(product));
         }
