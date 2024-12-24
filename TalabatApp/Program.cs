@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using TalabatApp.Core.Entities;
 using TalabatApp.Core.Repository.Contract;
 using TalabatApp.Errors;
+using TalabatApp.Extensions;
 using TalabatApp.Helpers;
 using TalabatApp.MiddleWares;
 using TalabatApp.Repository;
@@ -25,79 +26,25 @@ namespace TalabatApp
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            //builder.Services.AddScoped<IGenericRepository<Product>, GenericRepositories<Product>>();
-            //builder.Services.AddScoped<IGenericRepository<ProductBrand>, GenericRepositories<ProductBrand>>();
-            //builder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepositories<ProductCategory>>();
-          
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositories<>));
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
-            
-
-
             builder.Services.AddDbContext<StoreContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            builder.Services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.InvalidModelStateResponseFactory = (actioncontext) =>
-                {
-                    var errors = actioncontext.ModelState.Where(P => P.Value.Errors.Count() > 0)
-                                                         .SelectMany(P => P.Value.Errors)
-                                                         .Select(E => E.ErrorMessage)
-                                                         .ToList();
+            builder.Services.AddDependencyServices();
 
-                    var response = new ApiValidationErrorResponse()
-                    {
-                        Errors = errors
-                    };
-                    return new BadRequestObjectResult(response);
-
-                };
-            });
 
             var app = builder.Build();
 
-            app.Services.GetRequiredService<ILogger<Program>>();
-            using var scope = app.Services.CreateScope();
-            var services = scope.ServiceProvider;
-            var dbcontext = services.GetRequiredService<StoreContext>();
-
-            var loggerFactor = services.GetRequiredService<ILoggerFactory>();
-
-            try
-            {
-                await dbcontext.Database.MigrateAsync();
-                await StoreContextSeeding.SeedAsync(dbcontext);
-
-            }catch(Exception ex)
-            {
-                var logger = loggerFactor.CreateLogger<Program>();
-                logger.LogError(ex, "There is Error in Migration Process");
-            }
-
+            app.UpdateDatabase();
 
 
             // Configure the HTTP request pipeline.
 
-            app.UseMiddleware<ExceptionMiddleware>();
+            app.AddSwaggerServices();
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.AddMiddleWare();
 
-            app.UseStatusCodePagesWithReExecute("/Errors/{0}"); // NotFound(EndPoint) Or UnAuthorized
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-            app.UseStaticFiles();
-
-            app.MapControllers();
 
             app.Run();
         }
