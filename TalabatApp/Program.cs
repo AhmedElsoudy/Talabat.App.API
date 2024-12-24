@@ -89,6 +89,8 @@ namespace TalabatApp
                 app.UseSwaggerUI();
             }
 
+            app.UseStatusCodePagesWithReExecute("/Errors/{0}"); // NotFound(EndPoint) Or UnAuthorized
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
