@@ -31,12 +31,12 @@ namespace TalabatApp.Controllers
 
         [HttpGet]
 
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts()
+        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetAllProducts()
         {
             var spec = new ProductWithBrandAndCategorySpecification();
             var products = await _productRepo.GetAllWithSpecAsync(spec);
             
-            return Ok( _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(products) );
+            return Ok( _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products) );
         }
 
 
@@ -56,7 +56,7 @@ namespace TalabatApp.Controllers
         }
 
         [HttpGet("brands")]
-        public async Task<ActionResult<IEnumerable<ProductBrand>>> GetBrands()
+        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetBrands()
         {
             var brands = await _brandsRepo.GetAllAsync();
 
@@ -78,7 +78,7 @@ namespace TalabatApp.Controllers
         }
 
         [HttpGet("categories")]
-        public async Task<ActionResult<IEnumerable<ProductBrand>>> GetCategories()
+        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetCategories()
         {
             var categories = await _categoryRepo.GetAllAsync();
 
@@ -97,5 +97,9 @@ namespace TalabatApp.Controllers
             }
             return Ok(category);
         }
+
+
+
+        
     }
 }
