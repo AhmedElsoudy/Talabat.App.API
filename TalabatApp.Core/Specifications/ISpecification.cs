@@ -12,6 +12,8 @@ namespace TalabatApp.Core.Specifications
     {
         public Expression<Func<T, bool>> Criteria { get; set; }
         public List<Expression<Func<T, object>>> Includes { get; set; }
+        public Expression<Func<T, object>> OrderBy { get; set; }  // OrderBy(P => P.Name)
+        public Expression<Func<T, object>> OrderByDesc { get; set; } // OrderByDesc(P => P.Name)
 
 
     }

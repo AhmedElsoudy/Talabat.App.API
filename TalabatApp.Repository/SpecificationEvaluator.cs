@@ -16,12 +16,26 @@ namespace TalabatApp.Repository
         {
             var query = sequence;
 
+
+            // Filtration
             if(spec.Criteria is not null)
             {
                 query = query.Where(spec.Criteria);
             }
+            
 
+            // Sorting
+            if(spec.OrderBy is not null)
+            {
+                query = query.OrderBy(spec.OrderBy);
+            }
+            else if(spec.OrderByDesc is not null)
+            {
+                query = query.OrderByDescending(spec.OrderByDesc);
+            }
+           
 
+            // InCludes => Relative Data
             query = spec.Includes.Aggregate(query,(currentQuery, includeExpression) => currentQuery.Include(includeExpression));
 
             return query;
