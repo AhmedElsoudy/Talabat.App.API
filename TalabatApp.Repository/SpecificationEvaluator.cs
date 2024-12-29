@@ -33,6 +33,12 @@ namespace TalabatApp.Repository
             {
                 query = query.OrderByDescending(spec.OrderByDesc);
             }
+
+            //Pagination
+            if (spec.IsPaginationEnable)
+            {
+                query = query.Skip(spec.Skip).Take(spec.Take);
+            }
            
 
             // InCludes => Relative Data
