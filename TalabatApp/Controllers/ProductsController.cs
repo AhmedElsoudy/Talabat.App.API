@@ -6,6 +6,7 @@ using TalabatApp.Core.Repository.Contract;
 using TalabatApp.Core.Specifications;
 using TalabatApp.Dtos;
 using TalabatApp.Errors;
+using TalabatApp.Helpers;
 
 namespace TalabatApp.Controllers
 {
@@ -35,8 +36,12 @@ namespace TalabatApp.Controllers
         {
             var spec = new ProductWithBrandAndCategorySpecification(specParam);
             var products = await _productRepo.GetAllWithSpecAsync(spec);
-            
-            return Ok( _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products) );
+            var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products);
+
+            var countSpec = new ProductCountSpecification(specParam);
+            var count = await _productRepo.GetCountAsync(countSpec);
+
+            return Ok(new PaginationResponse<ProductDto>(specParam.PageSize, specParam.PageIndex, count,  data) );
         }
 
 
