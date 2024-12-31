@@ -26,6 +26,9 @@ namespace TalabatApp.Core.Specifications
 
         public int PageIndex { get; set; }
 
+        public string? Search { get; set; }
+
+
 
 
     }

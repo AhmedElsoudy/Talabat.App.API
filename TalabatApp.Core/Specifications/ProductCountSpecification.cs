@@ -12,6 +12,7 @@ namespace TalabatApp.Core.Specifications
         public ProductCountSpecification(ProductSpecParam specParam) : base
             (
                 P =>
+                    (string.IsNullOrEmpty(specParam.Search) || P.Name.ToLower().Contains(specParam.Search.ToLower())) &&
                     (!specParam.BrandId.HasValue || P.BrandId == specParam.BrandId) &&
                     (!specParam.CategoryId.HasValue || P.CategoryId == specParam.CategoryId)
 
