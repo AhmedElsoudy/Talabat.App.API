@@ -38,6 +38,7 @@ namespace TalabatApp
                 return ConnectionMultiplexer.Connect(connect);
             }
             );
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             builder.Services.AddDependencyServices();
 
