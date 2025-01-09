@@ -7,6 +7,7 @@ using TalabatApp.Repository;
 using TalabatApp.Repository.Repositories;
 using Microsoft.EntityFrameworkCore;
 using TalabatApp.MiddleWares;
+using TalabatApp.Repository.Data.Identity;
 
 namespace TalabatApp.Extensions
 {
@@ -52,6 +53,7 @@ namespace TalabatApp.Extensions
             using var scope = app.Services.CreateScope();
             var services = scope.ServiceProvider;
             var dbcontext = services.GetRequiredService<StoreContext>();
+            var identityDbcontext = services.GetRequiredService<AppIdentityDbContext>();
 
             var loggerFactor = services.GetRequiredService<ILoggerFactory>();
 
@@ -59,6 +61,8 @@ namespace TalabatApp.Extensions
             {
                 await dbcontext.Database.MigrateAsync();
                 await StoreContextSeeding.SeedAsync(dbcontext);
+                await identityDbcontext.Database.MigrateAsync();
+
 
             }
             catch (Exception ex)

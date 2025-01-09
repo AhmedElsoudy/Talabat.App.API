@@ -10,6 +10,7 @@ using TalabatApp.Helpers;
 using TalabatApp.MiddleWares;
 using TalabatApp.Repository;
 using TalabatApp.Repository.Data;
+using TalabatApp.Repository.Data.Identity;
 using TalabatApp.Repository.Repositories;
 
 namespace TalabatApp
@@ -30,6 +31,11 @@ namespace TalabatApp
             builder.Services.AddDbContext<StoreContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            builder.Services.AddDbContext<AppIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
             });
 
             builder.Services.AddSingleton<IConnectionMultiplexer>((serviceProvider) =>
