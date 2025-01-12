@@ -8,6 +8,8 @@ using TalabatApp.Repository.Repositories;
 using Microsoft.EntityFrameworkCore;
 using TalabatApp.MiddleWares;
 using TalabatApp.Repository.Data.Identity;
+using Microsoft.AspNetCore.Identity;
+using TalabatApp.Core.Entities.Identity;
 
 namespace TalabatApp.Extensions
 {
@@ -47,64 +49,28 @@ namespace TalabatApp.Extensions
             return services;
         }
 
-        public async static void UpdateDatabase( this WebApplication app)
-        {
-            app.Services.GetRequiredService<ILogger<Program>>();
-            using var scope = app.Services.CreateScope();
-            var services = scope.ServiceProvider;
-            var dbcontext = services.GetRequiredService<StoreContext>();
-            var identityDbcontext = services.GetRequiredService<AppIdentityDbContext>();
-
-            var loggerFactor = services.GetRequiredService<ILoggerFactory>();
-
-            try
-            {
-                await dbcontext.Database.MigrateAsync();
-                await StoreContextSeeding.SeedAsync(dbcontext);
-                await identityDbcontext.Database.MigrateAsync();
+        //public async static void UpdateDatabase( this WebApplication app)
+        //{
+            
 
 
-            }
-            catch (Exception ex)
-            {
-                var logger = loggerFactor.CreateLogger<Program>();
-                logger.LogError(ex, "There is Error in Migration Process");
-            }
+        //}
+
+        //public static WebApplication AddSwaggerServices(this WebApplication app)
+        //{
+
+           
+
+        //    return app;
+        //}
+
+        //public static WebApplication AddMiddleWare(this WebApplication app)
+        //{
+           
 
 
-        }
-
-        public static WebApplication AddSwaggerServices(this WebApplication app)
-        {
-
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            return app;
-        }
-
-        public static WebApplication AddMiddleWare(this WebApplication app)
-        {
-            app.UseMiddleware<ExceptionMiddleware>();
-
-            app.AddSwaggerServices();
-
-            app.UseStatusCodePagesWithReExecute("/Errors/{0}"); // NotFound(EndPoint) Or UnAuthorized
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-            app.UseStaticFiles();
-
-            app.MapControllers();
-
-
-            return app;
-        }
+        //    return app;
+        //}
 
 
 
