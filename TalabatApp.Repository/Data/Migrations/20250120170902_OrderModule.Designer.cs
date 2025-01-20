@@ -12,7 +12,7 @@ using TalabatApp.Repository.Data;
 namespace TalabatApp.Repository.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250120152703_OrderModule")]
+    [Migration("20250120170902_OrderModule")]
     partial class OrderModule
     {
         /// <inheritdoc />
@@ -122,7 +122,7 @@ namespace TalabatApp.Repository.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DeliveryMethod");
+                    b.ToTable("DeliveryMethods");
                 });
 
             modelBuilder.Entity("TalabatApp.Core.Order_Entities.Order", b =>
@@ -158,7 +158,7 @@ namespace TalabatApp.Repository.Data.Migrations
 
                     b.HasIndex("DeliveryMethodId");
 
-                    b.ToTable("Order");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("TalabatApp.Core.Order_Entities.OrderItem", b =>
@@ -182,7 +182,7 @@ namespace TalabatApp.Repository.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("TalabatApp.Core.Entities.Product", b =>
@@ -238,7 +238,7 @@ namespace TalabatApp.Repository.Data.Migrations
 
                             b1.HasKey("OrderId");
 
-                            b1.ToTable("Order");
+                            b1.ToTable("Orders");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderId");
@@ -274,7 +274,7 @@ namespace TalabatApp.Repository.Data.Migrations
 
                             b1.HasKey("OrderItemId");
 
-                            b1.ToTable("OrderItem");
+                            b1.ToTable("OrderItems");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderItemId");

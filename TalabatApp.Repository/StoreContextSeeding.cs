@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using TalabatApp.Core.Entities;
+using TalabatApp.Core.Order_Entities;
 using TalabatApp.Repository.Data;
 
 namespace TalabatApp.Repository
@@ -98,6 +99,29 @@ namespace TalabatApp.Repository
             }
             #endregion
 
+
+            #region Seeding DeliveryMethods Data
+
+            var deliveryData = File.ReadAllText("../TalabatApp.Repository/DataSeeding/delivery.json");
+
+            var deliveryMethods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
+
+            if (_context.DeliveryMethods.Count() == 0)
+            {
+                if (deliveryMethods.Count() > 0)
+                {
+                    foreach (var method in deliveryMethods)
+                    {
+                        _context.Set<DeliveryMethod>().Add(method);
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+
+            }
+           
+
+            #endregion
         }
     }
 }
