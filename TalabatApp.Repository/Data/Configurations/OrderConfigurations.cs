@@ -25,6 +25,11 @@ namespace TalabatApp.Repository.Data.Configurations
             builder.Property(Order => Order.SubTotal)
                    .HasColumnType("decimal(18,2)");
 
+            builder.HasOne(O => O.DeliveryMethod)
+                   .WithMany()
+                   .HasForeignKey(O => O.DeliveryMethodId)
+                   .OnDelete(DeleteBehavior.SetNull);
+
 
         }
     }
