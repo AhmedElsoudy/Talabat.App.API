@@ -10,6 +10,9 @@ using TalabatApp.MiddleWares;
 using TalabatApp.Repository.Data.Identity;
 using Microsoft.AspNetCore.Identity;
 using TalabatApp.Core.Entities.Identity;
+using TalabatApp.Core;
+using TalabatApp.Core.Services.Contract;
+using TalabatApp.Services;
 
 namespace TalabatApp.Extensions
 {
@@ -22,8 +25,12 @@ namespace TalabatApp.Extensions
             //builder.Services.AddScoped<IGenericRepository<ProductBrand>, GenericRepositories<ProductBrand>>();
             //builder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepositories<ProductCategory>>();
 
+
+            services.AddScoped(typeof(IOrderService), typeof(OrderService));
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositories<>));
             services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
+            services.AddScoped(typeof(IAuthService), typeof(AuthService));
             
 
             services.Configure<ApiBehaviorOptions>(options =>

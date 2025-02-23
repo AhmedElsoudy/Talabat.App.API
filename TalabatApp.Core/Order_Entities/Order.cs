@@ -13,10 +13,9 @@ namespace TalabatApp.Core.Order_Entities
         {
             
         }
-        public Order(string buyerEmail, OrderStatus status, ShippingAddress shippingAddress, DeliveryMethod deliveryMethod, ICollection<OrderItem> items, decimal subTotal)
+        public Order(string buyerEmail, ShippingAddress shippingAddress, DeliveryMethod deliveryMethod, ICollection<OrderItem> items, decimal subTotal)
         {
             BuyerEmail = buyerEmail;
-            Status = status;
             ShippingAddress = shippingAddress;
             DeliveryMethod = deliveryMethod;
             Items = items;
@@ -32,7 +31,8 @@ namespace TalabatApp.Core.Order_Entities
         public ICollection<OrderItem> Items { get; set; } = new HashSet<OrderItem>();
         public decimal SubTotal { get; set; }
         public decimal GetTotal() => SubTotal + DeliveryMethod.Cost;
-        public string PaymentIntentId { get; set; }
+        public string PaymentIntentId { get; set; } = string.Empty;
+
 
     }
 }

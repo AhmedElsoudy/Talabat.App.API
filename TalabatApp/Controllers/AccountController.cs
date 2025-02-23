@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TalabatApp.Core.Entities.Identity;
+using TalabatApp.Core.Services.Contract;
 using TalabatApp.Dtos;
 using TalabatApp.Errors;
+using TalabatApp.Extensions;
 
 namespace TalabatApp.Controllers
 {
@@ -12,11 +17,13 @@ namespace TalabatApp.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IAuthService _authService;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IAuthService authService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _authService = authService;
         }
 
         [HttpPost("login")]  // POST : /api/Account/login
@@ -32,7 +39,7 @@ namespace TalabatApp.Controllers
             {
                 DisplayName = user.DisplayName,
                 Email = user.Email,
-                Token = "this Will be Token"
+                Token = await _authService.CreateTokenAsync(user, _userManager)
             });
 
         }
@@ -41,6 +48,13 @@ namespace TalabatApp.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto Form)
         {
+
+            if (CheckEmailExist(Form.Email).Result.Value)
+                return BadRequest(new ApiValidationErrorResponse() { Errors = new string[] { "This Email is already Exist!" } });
+
+
+
+
             // Create User
             var user = new AppUser()
             {
@@ -62,11 +76,44 @@ namespace TalabatApp.Controllers
             {
                 DisplayName = user.DisplayName,
                 Email = user.Email,
-                Token = "this will be token"
+                Token = await _authService.CreateTokenAsync(user, _userManager)
             });
 
         }
 
- 
+
+        [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet]
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
+            var user = await _userManager.FindByEmailAsync(email);
+            return Ok(new UserDto()
+            {
+                DisplayName = user.DisplayName ?? string.Empty,
+                Email = user.Email ?? string.Empty,
+                Token = await _authService.CreateTokenAsync(user, _userManager)
+            });
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet("address")]
+        public async Task<ActionResult<Address>> GetUserAddress()
+        { 
+            var user = await _userManager.FindUserWithAddressByEmailAsync(User);
+
+            return Ok(user.Address);
+        }
+
+
+        [HttpGet("emailExist")]
+        public async Task<ActionResult<bool>> CheckEmailExist(string email)
+        {
+            return await _userManager.FindByEmailAsync(email) is not null;
+        }
+
+
+
+
     }
 }
