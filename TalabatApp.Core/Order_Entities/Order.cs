@@ -31,7 +31,7 @@ namespace TalabatApp.Core.Order_Entities
         public ICollection<OrderItem> Items { get; set; } = new HashSet<OrderItem>();
         public decimal SubTotal { get; set; }
         public decimal GetTotal() => SubTotal + DeliveryMethod.Cost;
-        public string PaymentIntentId { get; set; } = string.Empty;
+        public string? PaymentIntentId { get; set; } = string.Empty;
 
 
     }
