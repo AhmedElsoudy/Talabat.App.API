@@ -33,6 +33,7 @@ namespace TalabatApp.Controllers
         }
 
         [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
+        [CachedAttribute(300)]
         [HttpGet]
 
         public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetAllProducts([FromQuery] ProductSpecParam specParam)
@@ -50,6 +51,7 @@ namespace TalabatApp.Controllers
 
         [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
+        [CachedAttribute(300)]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
@@ -63,6 +65,7 @@ namespace TalabatApp.Controllers
             return Ok(_mapper.Map<Product, ProductDto>(product));
         }
 
+        [CachedAttribute(300)]
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetBrands()
         {
@@ -74,6 +77,7 @@ namespace TalabatApp.Controllers
 
         [ProducesResponseType(typeof(ProductBrand), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
+        [CachedAttribute(300)]
         [HttpGet("brands/{id}")]
         public async Task<ActionResult<ProductBrand>> GetBrandById(int id)
         {
@@ -85,6 +89,7 @@ namespace TalabatApp.Controllers
             return Ok(brand);
         }
 
+        [CachedAttribute(300)]
         [HttpGet("categories")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetCategories()
         {
@@ -95,6 +100,7 @@ namespace TalabatApp.Controllers
 
         [ProducesResponseType(typeof(ProductCategory), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
+        [CachedAttribute(300)]
         [HttpGet("categories/{id}")]
         public async Task<ActionResult<ProductCategory>> GetCategoryById(int id)
         {

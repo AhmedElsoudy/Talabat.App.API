@@ -31,7 +31,7 @@ namespace TalabatApp.Extensions
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositories<>));
             services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
             services.AddScoped(typeof(IAuthService), typeof(AuthService));
-            
+            services.AddSingleton(typeof(IResponseCacheService), typeof(ResponseCacheService));
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
