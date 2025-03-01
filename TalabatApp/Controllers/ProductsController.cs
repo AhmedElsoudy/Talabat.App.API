@@ -32,7 +32,7 @@ namespace TalabatApp.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
+        // [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
         [CachedAttribute(300)]
         [HttpGet]
 

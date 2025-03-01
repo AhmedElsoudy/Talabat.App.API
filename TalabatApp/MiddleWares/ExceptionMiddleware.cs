@@ -35,7 +35,7 @@ namespace TalabatApp.MiddleWares
                 var response = _env.IsDevelopment() ?
                     new ExceptionErrorResponse((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
                     :
-                    new ExceptionErrorResponse((int)HttpStatusCode.InternalServerError);
+                    new ExceptionErrorResponse((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString());
 
                 var responseOptions = new JsonSerializerOptions()
                 {
