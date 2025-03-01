@@ -27,6 +27,7 @@ namespace TalabatApp.Extensions
 
 
             services.AddScoped(typeof(IOrderService), typeof(OrderService));
+            services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositories<>));
             services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
